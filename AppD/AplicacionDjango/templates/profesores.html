@@ -1,12 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profesores</title>
-</head>
-<body style="background-color: lightgoldenrodyellow">
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block contenidoQCambia %}
     <h1>Vista de Profesores</h1>
-</body>
-</html>
+
+    <ul>
+        <li>Julián Rosas Sandillú</li>
+        <li>Agustín Rojas</li>
+        <li>Guillermo Giamona</li>
+    </ul>
+{% endblock contenidoQCambia %}
