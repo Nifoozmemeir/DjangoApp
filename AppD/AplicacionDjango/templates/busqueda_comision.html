@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block contenidoQCambia %}
+    <form action="{% url 'Buscar' %}" method="GET">{% csrf_token %}
+        <p>Nro: <input type="number" name="comision" id=""> de comision</p>
+        <button type="submit"> Buscar </button>
+    </form>
+{% endblock contenidoQCambia %}

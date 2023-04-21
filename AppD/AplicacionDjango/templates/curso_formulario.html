@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block contenidoQCambia %}
+    <form action="{% url 'CursoFormulario' %}" method="POST">{% csrf_token %}
+        {{mi_formulario.as_p}}
+        <button type="submit"> Enviar </button>
+    </form>
+{% endblock contenidoQCambia %}
+    

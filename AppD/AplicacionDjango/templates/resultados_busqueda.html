@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block contenidoQCambia %}
+    <p>Estamos buscando el curso con la comision nro: {{comision}}</p>
+    
+    {% if cursos %}
+        <ul>
+            {% for curso in cursos %}
+                <li>
+                    {{curso.nombre}} - {{curso.comision}}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No se encontró ningun curso</p>
+    {% endif %}
+        
+{% endblock contenidoQCambia %}
