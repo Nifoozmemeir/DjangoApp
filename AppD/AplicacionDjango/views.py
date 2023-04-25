@@ -1,5 +1,8 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
+from django.views.generic import ListView
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import DeleteView, UpdateView, CreateView
 from .models import *
 from .forms import *
 
@@ -37,7 +40,9 @@ def curso_formulario(request):
             data = mi_formulario.cleaned_data
             curso = Curso(nombre=request.POST['curso'], comision=request.POST['comision'])
             curso.save()
-        return render(request, "inicio.html")
+            return HttpResponseRedirect('/Appdjango/')
+        else:
+            return render(request, "inicio.html", {"mensaje": "Formulario invalido"})
     else:
         mi_formulario = Curso_Formulario()
         return render(request, "curso_formulario.html", {"mi_formulario": mi_formulario})
@@ -49,7 +54,9 @@ def profesor_formulario(request):
             data = mi_formulario.cleaned_data
             profesor = Profesor(nombre=request.POST['nombre'], apellido=request.POST['apellido'], email=request.POST['email'], profesion=request.POST['profesion'])
             profesor.save()
-        return render(request, "inicio.html")
+            return HttpResponseRedirect('/Appdjango/')
+        else:
+            return render(request, "inicio.html", {"mensaje": "Formulario invalido"})
     else:
         mi_formulario = Profesor_Formulario()
         return render(request, "profesores_formulario.html", {"mi_formulario": mi_formulario})
@@ -61,7 +68,9 @@ def estudiante_formulario(request):
             data = mi_formulario.cleaned_data
             estudiante = Estudiante(nombre=request.POST['nombre'], apellido=request.POST['apellido'], email=request.POST['email'])
             estudiante.save()
-        return render(request, "inicio.html")
+            return HttpResponseRedirect('/Appdjango/')
+        else:
+            return render(request, "inicio.html", {"mensaje": "Formulario invalido"})
     else:
         mi_formulario = Estudiante_Formulario()
         return render(request, "estudiante_formulario.html", {"mi_formulario": mi_formulario})
@@ -76,3 +85,65 @@ def buscar(request):
         return render(request, "resultados_busqueda.html", {"cursos": cursos, "comision": comision})
     else:
         return HttpResponse("No enviaste info")
+
+def lista_profesores(request):
+    profesores = Profesor.objects.all()
+    return render(request, "leer_profesores.html", {"profesores": profesores})
+
+def eliminar_profesor(request, id):
+    if request.method == 'POST':
+        profesor = Profesor.objects.get(id=id)
+        profesor.delete()
+        profesores = Profesor.objects.all()
+        return render(request, "leer_profesores.html", {"profesores": profesores})
+    
+def editar_profesor(request, id):
+    profesor = Profesor.objects.get(id=id)
+    if request.method == 'POST':
+        mi_formulario = Profesor_Formulario(request.POST)
+        if mi_formulario.is_valid():
+            data = mi_formulario.cleaned_data
+            profesor.nombre = data['nombre']
+            profesor.apellido = data['apellido']
+            profesor.email = data['email']
+            profesor.profesion = data['profesion']
+            profesor.save()
+            return HttpResponseRedirect('/Appdjango/')
+        else:
+            return render(request, "inicio.html", {"mensaje": "Formulario invalido"})
+    else:
+        mi_formulario = Profesor_Formulario(initial={
+            "nombre": profesor.nombre,
+            "apellido": profesor.apellido,
+            "email": profesor.email,
+            "profesion": profesor.profesion
+        })
+        return render(request, "editar_profesor.html", {"mi_formulario": mi_formulario, "id": profesor.id})
+    
+class CursoList(ListView):
+    model = Curso
+    template_name = "curso_list_view.html"
+    context_object_name = "cursos"
+
+class CursoDetail(DetailView):
+    model = Curso
+    template_name = "curso_detail_view.html"
+    context_object_name = "curso"
+
+class CursoCreate(CreateView):
+    model = Curso
+    template_name = "curso_create_view.html"
+    fields = ['nombre', 'comision']
+    success_url = '/Appdjango/'
+
+class CursoUpdate(UpdateView):
+    model = Curso
+    template_name = "curso_update_view.html"
+    fields = ('__all__')
+    success_url = '/Appdjango/'
+    context_object_name = 'curso'
+
+class CursoDelete(DeleteView):
+    model = Curso
+    template_name = "curso_delete_view.html"
+    success_url = '/Appdjango/'

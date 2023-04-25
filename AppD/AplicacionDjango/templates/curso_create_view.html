@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block contenidoQCambia %}
+    <form action="{% url 'CursosCreateView' %}" method="POST">{% csrf_token %}
+        <table>
+            {{form.as_table}}
+        </table>
+        <button type="submit"> Enviar </button>
+    </form>
+{% endblock contenidoQCambia %}
