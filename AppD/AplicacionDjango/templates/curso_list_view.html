@@ -6,21 +6,21 @@
     <h1>ListView de Cursos</h1>
 
     <ul>
-        
         {% for curso in cursos %}
             <li>
-                {{curso}}
+                <a href="{% url 'CursosDetailView' curso.id %}">
+                    {{curso}}
+                </a>
             </li>
             <div style="display: flex; column-gap: 5px;">
-                <form action="{% url 'CursosDeleteView' curso.id %}" method="POST">{% csrf_token %}
-                    <button type="submit">Eliminar</button>
-                </form>
+                <button>
+                    <a href="{% url 'CursosDeleteView' curso.id %}">Eliminar</a>
+                </button>
                 <button>
                     <a href="{% url 'CursosUpdateView' curso.id %}">Editar</a>
                 </button>
             </div>
-        {% endfor %}
-            
+        {% endfor %}  
     </ul>
     <a href="{% url 'CursosCreateView' %}">Crear Curso</a>
 {% endblock contenidoQCambia %}

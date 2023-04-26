@@ -1,6 +1,7 @@
 from django.contrib import admin
+from django.contrib.auth.views import LogoutView
 from django.urls import path
-from AplicacionDjango.views import *
+from .views import *
 
 urlpatterns = [
     path('agrega-curso/<nombre>/<camada>', curso),
@@ -23,4 +24,7 @@ urlpatterns = [
     path('cv-cursos', CursoCreate.as_view(), name="CursosCreateView"),
     path('up-cursos/<pk>', CursoUpdate.as_view(), name="CursosUpdateView"),
     path('delv-cursos/<pk>', CursoDelete.as_view(), name="CursosDeleteView"),
+    path('login', login_usuarios, name="Login"),
+    path('reg-usu', registro_usuarios, name="RegistroUsuarios"),
+    path('logout', LogoutView.as_view(template_name='logout.html'), name="Logout"),
 ]
