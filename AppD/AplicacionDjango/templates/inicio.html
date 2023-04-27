@@ -6,6 +6,13 @@
     <h1>Titulo de inicio</h1>
 
     <h4>{{mensaje}}</h4>
-    
+        
+    {% for fields_error in mi_formulario.errors.values %}
+        
+        {% for error in fields_error %}
+            <li>{{error}}</li>
+        {% endfor %}
+    {% endfor %}
+        
     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat deleniti eaque debitis earum quo, odio, eius laborum, veniam iusto distinctio iste molestiae. Alias a voluptates voluptate eligendi quos amet consectetur.</p>
 {% endblock contenidoQCambia %}

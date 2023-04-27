@@ -27,4 +27,5 @@ urlpatterns = [
     path('login', login_usuarios, name="Login"),
     path('reg-usu', registro_usuarios, name="RegistroUsuarios"),
     path('logout', LogoutView.as_view(template_name='logout.html'), name="Logout"),
+    path('ed-perfil', editar_perfil, name="EditarPerfil"),
 ]

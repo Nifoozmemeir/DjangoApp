@@ -12,31 +12,35 @@ from .models import *
 from .forms import *
 
 # Create your views here.
-def curso(self, nombre, comision):
+def curso(request, nombre, comision):
     curso = Curso(nombre=nombre, comision=comision)
     curso.save()
     return HttpResponse(f"""
         <p>Curso: {curso.nombre} - Camada: {curso.comision} creado!</p>
         """)
 
-def lista_cursos(self):
+def lista_cursos(request):
     lista = Curso.objects.all()
-    return render(self, "lista_cursos.html", {"lista_cursos": lista})
+    return render(request, "lista_cursos.html", {"lista_cursos": lista})
 
-def inicio(self):
-    return render(self, "inicio.html")
+def inicio(request):
+    try: 
+        avatar = Avatar.objects.get(user=request.user.id)
+        return render(request, 'inicio.html', {'url': avatar.imagen.url})
+    except:
+        return render(request, "inicio.html")
 
-def cursos(self):
-    return render(self, "cursos.html")
+def cursos(request):
+    return render(request, "cursos.html")
 
-def profesores(self):
-    return render(self, "profesores.html")
+def profesores(request):
+    return render(request, "profesores.html")
 
-def estudiantes(self):
-    return render(self, "estudiantes.html")
+def estudiantes(request):
+    return render(request, "estudiantes.html")
 
-def entregables(self):
-    return render(self, "entregables.html")
+def entregables(request):
+    return render(request, "entregables.html")
 
 def curso_formulario(request):
     if request.method == 'POST':
@@ -187,3 +191,21 @@ def registro_usuarios(request):
     else:
         mi_formulario = UserCreationForm()
         return render(request, "registro_usuarios.html", {"mi_formulario": mi_formulario})
+    
+def editar_perfil(request):
+    usuario = request.user
+    if request.method == 'POST':
+        mi_formulario = UsuarioEditForm(request.POST, instance=request.user)
+        if mi_formulario.is_valid():
+            data = mi_formulario.cleaned_data
+            usuario.first_name = data['first_name']
+            usuario.last_name = data['last_name']
+            usuario.email = data['email']
+            usuario.set_password(data["password1"])
+            usuario.save()
+            return render(request, "inicio.html", {"mensaje": "datos actualizados!"})
+        else:
+            return render(request, "inicio.html", {"mi_formulario": mi_formulario})
+    else:
+        mi_formulario = UsuarioEditForm(instance=request.user)
+        return render(request, "editar_perfil.html", {"mi_formulario": mi_formulario})
