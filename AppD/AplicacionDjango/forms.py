@@ -35,3 +35,8 @@ class UsuarioEditForm(UserChangeForm):
         if password2 != self.cleaned_data["password1"]:
             raise forms.ValidationError("Las contraseñas no coinciden!")
         return password2
+    
+class Avatar_Formulario(forms.ModelForm):
+    class Meta:
+        model=Avatar
+        fields = ['imagen']

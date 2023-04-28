@@ -209,3 +209,18 @@ def editar_perfil(request):
     else:
         mi_formulario = UsuarioEditForm(instance=request.user)
         return render(request, "editar_perfil.html", {"mi_formulario": mi_formulario})
+
+@login_required   
+def agregar_avatar(request):
+    if request.method == 'POST':
+        mi_formulario = Avatar_Formulario(request.POST, request.FILES)
+        if mi_formulario.is_valid():
+            usuario = User.objects.get(username=request.user)
+            avatar = Avatar(user=usuario, imagen=mi_formulario.cleaned_data['imagen'])
+            avatar.save()
+            return render(request, 'inicio.html', {"mensaje": "Avatar agregado ;)"})
+        else:
+            return render(request, "inicio.html", {"mensaje": "Formulario invalido"})
+    else:
+        mi_formulario = Avatar_Formulario()
+        return render(request, "agregar_avatar.html", {"mi_formulario": mi_formulario})
